@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
+    app:startDestination="@id/rvUserList">
+    <fragment
+        android:id="@+id/rvUserList"
+        android:name="com.example.firebase.screens.userList.UsersListFragment"
+        tools:layout="@layout/fragment_users_list">
+        <action
+            android:id="@+id/action_rvUserList_to_rvAddUser"
+            app:destination="@id/rvAddUser" />
+        <action
+            android:id="@+id/action_rvUserList_to_rvUpdateUser"
+            app:destination="@id/rvUpdateUser" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/rvUpdateUser"
+        android:name="com.example.firebase.screens.updaterUser.UpdateUserFragment"
+        tools:layout="@layout/fragment_update_user" />
+    <fragment
+        android:id="@+id/rvAddUser"
+        android:name="com.example.firebase.screens.addUser.AddUserFragment"
+        tools:layout="@layout/fragment_add_user" />
+
+</navigation>
