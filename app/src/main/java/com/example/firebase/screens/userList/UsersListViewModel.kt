@@ -27,18 +27,19 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
     fun deleteUser(position: Int) {
         val userId = userList.value?.get(position)?.id ?: ""
         reference.child(userId).removeValue().addOnCompleteListener { task ->
-            if (task.isSuccessful)
-                Toast.makeText(getApplication(), "User Deleted", Toast.LENGTH_SHORT).show()
-            else
-                Log.d(TAG, "deleteUser: ${task.exception}")
+            if (task.isSuccessful) Toast.makeText(
+                getApplication(),
+                "User Deleted",
+                Toast.LENGTH_SHORT
+            ).show()
+            else Log.d(TAG, "deleteUser: ${task.exception}")
         }
     }
 
     private fun getDataFromDatabase() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (_userList.value?.isNotEmpty() == true)
-                    _userList.value?.clear()
+                if (_userList.value?.isNotEmpty() == true) _userList.value?.clear()
                 for (user in snapshot.children) user.getValue(User::class.java)?.let {
                     _userList.value?.add(it)
                     Log.d(TAG, "onDataChange: $it ")
@@ -49,5 +50,17 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
                 Toast.makeText(getApplication(), error.message, Toast.LENGTH_SHORT).show()
             }
         })
+    }
+
+    fun deleteAllUsers() {
+        reference.removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                Toast.makeText(
+                    getApplication(),
+                    "All Users Deleted",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else Log.d(TAG, "deleteAllUsers: ${task.exception}")
+        }
     }
 }
