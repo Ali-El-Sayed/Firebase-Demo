@@ -24,6 +24,16 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
         getDataFromDatabase()
     }
 
+    fun deleteUser(position: Int) {
+        val userId = userList.value?.get(position)?.id ?: ""
+        reference.child(userId).removeValue().addOnCompleteListener { task ->
+            if (task.isSuccessful)
+                Toast.makeText(getApplication(), "User Deleted", Toast.LENGTH_SHORT).show()
+            else
+                Log.d(TAG, "deleteUser: ${task.exception}")
+        }
+    }
+
     private fun getDataFromDatabase() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
@@ -34,6 +44,7 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
                     Log.d(TAG, "onDataChange: $it ")
                 }
             }
+
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(getApplication(), error.message, Toast.LENGTH_SHORT).show()
             }

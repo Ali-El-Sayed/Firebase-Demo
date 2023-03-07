@@ -19,7 +19,9 @@
     <fragment
         android:id="@+id/rvUpdateUser"
         android:name="com.example.firebase.screens.updaterUser.UpdateUserFragment"
-        tools:layout="@layout/fragment_update_user" />
+        tools:layout="@layout/fragment_update_user">
+
+    </fragment>
     <fragment
         android:id="@+id/rvAddUser"
         android:name="com.example.firebase.screens.addUser.AddUserFragment"

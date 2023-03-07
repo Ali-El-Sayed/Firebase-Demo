@@ -11,50 +11,62 @@
         android:layout_height="match_parent"
         tools:context=".screens.addUser.AddUserFragment">
 
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:orientation="vertical">
+            android:layout_height="match_parent">
 
-            <EditText
-                android:id="@+id/etUpdateName"
-                android:layout_width="300dp"
-                android:layout_height="55dp"
-                android:layout_margin="10dp"
-                android:hint="Name"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+            <androidx.appcompat.widget.LinearLayoutCompat
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/etUpdateAge"
-                android:layout_width="300dp"
-                android:layout_height="55dp"
-                android:layout_margin="10dp"
-                android:inputType="number"
-                android:hint="Age"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+                <ProgressBar
+                    android:id="@+id/pbLoading"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:visibility="invisible" />
 
-            <EditText
-                android:id="@+id/etUpdateEmail"
-                android:layout_width="300dp"
-                android:layout_height="55dp"
-                android:layout_margin="10dp"
-                android:hint="E-mail"
-                android:inputType="textEmailAddress"
-                android:textAlignment="center"
-                android:textSize="20sp" />
+                <EditText
+                    android:id="@+id/etUpdateName"
+                    android:layout_width="300dp"
+                    android:layout_height="55dp"
+                    android:layout_margin="10dp"
+                    android:hint="Name"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
-            <Button
-                android:id="@+id/btUpdateUser"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="10dp"
-                android:text="Update User"
-                android:textSize="20sp" />
+                <EditText
+                    android:id="@+id/etUpdateAge"
+                    android:layout_width="300dp"
+                    android:layout_height="55dp"
+                    android:layout_margin="10dp"
+                    android:hint="Age"
+                    android:inputType="number"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
-        </androidx.appcompat.widget.LinearLayoutCompat>
+                <EditText
+                    android:id="@+id/etUpdateEmail"
+                    android:layout_width="300dp"
+                    android:layout_height="55dp"
+                    android:layout_margin="10dp"
+                    android:hint="E-mail"
+                    android:inputType="textEmailAddress"
+                    android:textAlignment="center"
+                    android:textSize="20sp" />
 
+                <Button
+                    android:id="@+id/btUpdateUser"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="10dp"
+                    android:text="Update User"
+                    android:textSize="20sp" />
+
+            </androidx.appcompat.widget.LinearLayoutCompat>
+
+        </ScrollView>
     </FrameLayout>
 </layout>
