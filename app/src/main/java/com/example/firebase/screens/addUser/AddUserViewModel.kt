@@ -14,7 +14,7 @@ class AddUserViewModel(application: Application) : AndroidViewModel(application)
 
     fun addUser(name: String, age: Int, email: String) {
         val id = reference.push().key.toString()
-        val user: User = User(id, name, age, email)
+        val user = User(id, name, age, email)
 
         reference.child(id).setValue(user).addOnCompleteListener { task ->
             if (task.isSuccessful) Toast.makeText(

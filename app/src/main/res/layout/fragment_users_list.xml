@@ -30,10 +30,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="16dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
                 android:backgroundTint="#5E5E65"
                 app:icon="@drawable/fab_icon"
-                app:iconTint="@color/white" />
+                app:iconTint="@color/white"
+                tools:ignore="SpeakableTextPresentCheck" />
         </RelativeLayout>
     </FrameLayout>
 </layout>

@@ -27,6 +27,8 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
     private fun getDataFromDatabase() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
+                if (_userList.value?.isNotEmpty() == true)
+                    _userList.value?.clear()
                 for (user in snapshot.children) user.getValue(User::class.java)?.let {
                     _userList.value?.add(it)
                     Log.d(TAG, "onDataChange: $it ")
