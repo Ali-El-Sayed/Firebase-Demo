@@ -28,6 +28,9 @@ class UsersListAdapter(private var data: MutableList<User>) :
             binding.tvUserName.text = user?.name
             binding.tvUserAge.text = user?.age.toString()
             binding.tvUserEmail.text = user?.email
+            binding.root.setOnClickListener{
+
+            }
             binding.executePendingBindings()
         }
     }

@@ -34,7 +34,6 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
                     Log.d(TAG, "onDataChange: $it ")
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(getApplication(), error.message, Toast.LENGTH_SHORT).show()
             }
