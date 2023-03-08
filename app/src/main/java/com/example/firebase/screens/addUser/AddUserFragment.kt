@@ -29,9 +29,9 @@ class AddUserFragment : Fragment(R.layout.fragment_add_user) {
     }
 
     private fun performAdding() {
-        val name: String = binding?.etName?.text.toString()
-        val email: String = binding?.etEmail?.text.toString()
-        val age: Int = binding?.etAge?.text.toString().toIntOrNull() ?: 0
+        val name: String = binding?.etName?.text.toString().trim()
+        val email: String = binding?.etEmail?.text.toString().trim()
+        val age: Int = binding?.etAge?.text.toString().trim().toIntOrNull() ?: 0
         viewmodel.addUser(name, age, email)
     }
 
