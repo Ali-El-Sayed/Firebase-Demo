@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.*
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -25,6 +27,8 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val menuHost: MenuHost = requireActivity()
+
         binding = FragmentUsersListBinding.bind(view)
 
         // ViewModel Setup
@@ -38,6 +42,7 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
         viewModel.userList.observe(viewLifecycleOwner) {
             adapter.submitList(it)
         }
+
         // Swipe Effect
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
             0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
@@ -56,21 +61,26 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
         }).attachToRecyclerView(binding?.rvUserList)
 
-        addMenuProvider(R.menu.users_list_menu) {
-            when (it) {
-                R.id.menu_delteAll -> {
-                    showDialogMessage()
-                    true
-                }
-                else -> true
-            }
-        }
-
-
+        // recyclerView
         binding?.rvUserList?.adapter = adapter
         binding?.rvUserList?.layoutManager = LinearLayoutManager(
             requireContext(), RecyclerView.VERTICAL, false
         )
+
+        // inflate Option menu
+        menuHost.addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.users_list_menu, menu)
+            }
+
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                when (menuItem.itemId) {
+                    R.id.menu_delteAll -> showDialogMessage()
+                }
+                return true
+            }
+
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
 
         // fab clickListener
         binding?.fab?.setOnClickListener {
@@ -90,22 +100,6 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
         }
         dialogMessage.show()
-    }
-
-    private fun Fragment.addMenuProvider(@MenuRes menuRes: Int, callback: (id: Int) -> Boolean) {
-        val menuProvider = object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(menuRes, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem) = callback(menuItem.itemId)
-
-        }
-        (requireActivity() as MenuHost).addMenuProvider(
-            menuProvider,
-            viewLifecycleOwner,
-            Lifecycle.State.RESUMED
-        )
     }
 
     override fun onDestroyView() {

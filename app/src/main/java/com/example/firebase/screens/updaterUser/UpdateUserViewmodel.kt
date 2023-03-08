@@ -23,9 +23,9 @@ class UpdateUserViewmodel(application: Application) : AndroidViewModel(applicati
 
     fun updateUser() {
         val userMap = mutableMapOf<String, Any>()
-        userMap["id"] = this.updatedUser.value?.id ?: ""
-        userMap["name"] = updatedUser.value?.name ?: ""
-        userMap["email"] = updatedUser.value?.email ?: ""
+        userMap["id"] = this.updatedUser.value?.id?.trim() ?: ""
+        userMap["name"] = updatedUser.value?.name?.trim() ?: ""
+        userMap["email"] = updatedUser.value?.email?.trim() ?: ""
         userMap["age"] = updatedUser.value?.age ?: 0
 
         _isloading.value = true
