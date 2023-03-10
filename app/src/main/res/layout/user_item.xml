@@ -7,13 +7,11 @@
 
     </data>
 
-    <androidx.cardview.widget.CardView
+    <com.google.android.material.card.MaterialCardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_margin="6dp"
-        android:backgroundTint="@color/cardview_dark_background"
-        android:elevation="2dp"
-        app:cardCornerRadius="10dp">
+        android:backgroundTint="@color/md_theme_light_primary">
 
         <androidx.appcompat.widget.LinearLayoutCompat
             android:layout_width="match_parent"
@@ -21,7 +19,7 @@
             android:orientation="vertical"
             android:padding="20dp">
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvUserName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -31,7 +29,7 @@
                 android:textSize="18sp"
                 tools:text="Lionel Messi" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvUserAge"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -41,7 +39,7 @@
                 android:textSize="18sp"
                 tools:text="36 Years" />
 
-            <TextView
+            <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/tvUserEmail"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -51,5 +49,5 @@
                 android:textSize="18sp"
                 tools:text="Lionelmessi@yahoo.com" />
         </androidx.appcompat.widget.LinearLayoutCompat>
-    </androidx.cardview.widget.CardView>
+    </com.google.android.material.card.MaterialCardView>
 </layout>

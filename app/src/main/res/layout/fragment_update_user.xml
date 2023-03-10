@@ -28,40 +28,55 @@
                     android:layout_gravity="center"
                     android:visibility="invisible" />
 
-                <EditText
-                    android:id="@+id/etUpdateName"
-                    android:layout_width="300dp"
-                    android:layout_height="55dp"
-                    android:layout_margin="10dp"
-                    android:hint="Name"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
 
-                <EditText
-                    android:id="@+id/etUpdateAge"
-                    android:layout_width="300dp"
-                    android:layout_height="55dp"
-                    android:layout_margin="10dp"
-                    android:hint="Age"
-                    android:inputType="number"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUpdateName"
+                        android:layout_width="300dp"
+                        android:layout_height="55dp"
+                        android:hint="Name"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/etUpdateEmail"
-                    android:layout_width="300dp"
-                    android:layout_height="55dp"
-                    android:layout_margin="10dp"
-                    android:hint="E-mail"
-                    android:inputType="textEmailAddress"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUpdateAge"
+                        android:layout_width="300dp"
+                        android:layout_height="55dp"
+                        android:hint="Age"
+                        android:inputType="number"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etUpdateEmail"
+                        android:layout_width="300dp"
+                        android:layout_height="55dp"
+                        android:hint="E-mail"
+                        android:inputType="textEmailAddress"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <Button
                     android:id="@+id/btUpdateUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:text="Update User"
                     android:textSize="20sp" />
 

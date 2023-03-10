@@ -17,13 +17,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.firebase.R
 import com.example.firebase.databinding.FragmentUsersListBinding
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 private const val TAG = "UsersListFragment"
 
 class UsersListFragment : Fragment(R.layout.fragment_users_list) {
     private var binding: FragmentUsersListBinding? = null
     private lateinit var viewModel: UsersListViewModel
-
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -38,31 +38,39 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
         binding?.lifecycleOwner = viewLifecycleOwner
 
         // Recyclerview Setup
-        val adapter = UsersListAdapter(viewModel.userList.value ?: mutableListOf())
         viewModel.userList.observe(viewLifecycleOwner) {
+            val adapter = UsersListAdapter(viewModel.userList.value ?: mutableListOf())
             adapter.submitList(it)
+            binding?.rvUserList?.adapter = adapter
         }
+
+        // Hide Fab with Scrolling
+        binding?.rvUserList?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                super.onScrolled(recyclerView, dx, dy)
+                if (dy > 0 && binding?.fab?.visibility == View.VISIBLE) binding?.fab?.hide()
+                else if (dy < 0 && binding?.fab?.visibility != View.VISIBLE) binding?.fab?.show()
+            }
+        })
 
         // Swipe Effect
         ItemTouchHelper(object : ItemTouchHelper.SimpleCallback(
-            0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT
+            0, ItemTouchHelper.START or ItemTouchHelper.END
         ) {
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
-            ): Boolean {
-                return true
-            }
+            ): Boolean = true
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewModel.deleteUser(viewHolder.adapterPosition)
+//                adapter.notifyItemRemoved(viewHolder.adapterPosition)
             }
 
         }).attachToRecyclerView(binding?.rvUserList)
 
         // recyclerView
-        binding?.rvUserList?.adapter = adapter
         binding?.rvUserList?.layoutManager = LinearLayoutManager(
             requireContext(), RecyclerView.VERTICAL, false
         )
@@ -89,15 +97,13 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
     }
 
     private fun showDialogMessage() {
-        val dialogMessage = AlertDialog.Builder(requireContext())
-            .setTitle("Delete All Users ?")
-            .setMessage("If Click Yes, All Users Will be Deleted")
+        val dialogMessage = AlertDialog.Builder(requireContext()).setTitle("Delete All Users ?")
+            .setMessage("Click Yes to delete all users")
         dialogMessage.setNegativeButton("Cancel") { dialog, _ ->
             dialog.cancel()
         }
         dialogMessage.setPositiveButton("Yes") { _, _ ->
             viewModel.deleteAllUsers()
-
         }
         dialogMessage.show()
     }

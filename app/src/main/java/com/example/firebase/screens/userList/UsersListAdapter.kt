@@ -50,12 +50,11 @@ class UsersListAdapter(private var data: MutableList<User>) :
     override fun getItemCount(): Int = data.size
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        data[position].let {
+        getItem(position).let {
             holder.bind(it)
         }
     }
 }
-
 
 class UserListCallBack : DiffUtil.ItemCallback<User>() {
     override fun areItemsTheSame(oldItem: User, newItem: User): Boolean = oldItem == newItem

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
@@ -27,40 +28,54 @@
                     android:layout_height="wrap_content"
                     android:visibility="invisible" />
 
-                <EditText
-                    android:id="@+id/etName"
-                    android:layout_width="300dp"
-                    android:layout_height="55dp"
-                    android:layout_margin="10dp"
-                    android:hint="Name"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
 
-                <EditText
-                    android:id="@+id/etAge"
-                    android:layout_width="300dp"
-                    android:layout_height="55dp"
-                    android:layout_margin="10dp"
-                    android:hint="Age"
-                    android:inputType="number"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etName"
+                        android:layout_width="300dp"
+                        android:layout_height="55dp"
+                        android:hint="Name"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <EditText
-                    android:id="@+id/etEmail"
-                    android:layout_width="300dp"
-                    android:layout_height="55dp"
-                    android:layout_margin="10dp"
-                    android:hint="E-mail"
-                    android:inputType="textEmailAddress"
-                    android:textAlignment="center"
-                    android:textSize="20sp" />
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
 
-                <Button
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etAge"
+                        android:layout_width="300dp"
+                        android:layout_height="55dp"
+                        android:hint="Age"
+                        android:inputType="number"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.textfield.TextInputLayout
+                    style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/etEmail"
+                        android:layout_width="300dp"
+                        android:layout_height="55dp"
+                        android:hint="E-mail"
+                        android:inputType="textEmailAddress"
+                        android:textSize="20sp" />
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <com.google.android.material.button.MaterialButton
                     android:id="@+id/btAddUser"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:text="Add User"
                     android:textSize="20sp" />
 

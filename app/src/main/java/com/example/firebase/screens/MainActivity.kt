@@ -16,6 +16,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.firebase.R
 import com.example.firebase.databinding.ActivityMainBinding
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.firebase.database.*
 
 class MainActivity : AppCompatActivity() {

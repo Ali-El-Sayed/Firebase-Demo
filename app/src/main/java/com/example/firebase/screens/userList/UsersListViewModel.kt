@@ -13,7 +13,7 @@ import com.google.firebase.database.*
 private const val TAG: String = "UsersListViewModel"
 
 class UsersListViewModel(application: Application) : AndroidViewModel(application) {
-    private var _userList: MutableLiveData<MutableList<User>> = MutableLiveData(mutableListOf())
+    private var _userList = MutableLiveData<MutableList<User>>()
     val userList: LiveData<MutableList<User>>
         get() = _userList
 
@@ -39,11 +39,14 @@ class UsersListViewModel(application: Application) : AndroidViewModel(applicatio
     private fun getDataFromDatabase() {
         reference.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                if (_userList.value?.isNotEmpty() == true) _userList.value?.clear()
+                _userList.value?.clear()
+                val list = mutableListOf<User>()
                 for (user in snapshot.children) user.getValue(User::class.java)?.let {
-                    _userList.value?.add(it)
+                    list.add(it)
+//                    _userList.value?.add(it)
                     Log.d(TAG, "onDataChange: $it ")
                 }
+                _userList.value = list
             }
 
             override fun onCancelled(error: DatabaseError) {
