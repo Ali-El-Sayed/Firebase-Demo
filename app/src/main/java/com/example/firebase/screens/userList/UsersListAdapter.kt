@@ -1,5 +1,4 @@
 package com.example.firebase.screens.userList
-
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.os.bundleOf

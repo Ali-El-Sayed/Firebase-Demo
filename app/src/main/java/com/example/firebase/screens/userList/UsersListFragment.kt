@@ -24,6 +24,7 @@ private const val TAG = "UsersListFragment"
 class UsersListFragment : Fragment(R.layout.fragment_users_list) {
     private var binding: FragmentUsersListBinding? = null
     private lateinit var viewModel: UsersListViewModel
+    private lateinit var adapter: UsersListAdapter
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -39,7 +40,7 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
         // Recyclerview Setup
         viewModel.userList.observe(viewLifecycleOwner) {
-            val adapter = UsersListAdapter(viewModel.userList.value ?: mutableListOf())
+            adapter = UsersListAdapter(viewModel.userList.value ?: mutableListOf())
             adapter.submitList(it)
             binding?.rvUserList?.adapter = adapter
         }
@@ -65,7 +66,6 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewModel.deleteUser(viewHolder.adapterPosition)
-//                adapter.notifyItemRemoved(viewHolder.adapterPosition)
             }
 
         }).attachToRecyclerView(binding?.rvUserList)

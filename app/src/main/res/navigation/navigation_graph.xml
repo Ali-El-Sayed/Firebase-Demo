@@ -3,7 +3,33 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/rvUserList">
+    app:startDestination="@id/fLogin">
+    <fragment
+        android:id="@+id/fLogin"
+        android:name="com.example.firebase.screens.logIn.LoginFragment"
+        android:label="Login Fragment"
+        tools:layout="@layout/fragment_login">
+
+        <action
+            android:id="@+id/action_fLogin_to_rvUserList"
+            app:destination="@id/rvUserList" />
+        <action
+            android:id="@+id/action_fLogin_to_signUp"
+            app:destination="@id/signUp" />
+    </fragment>
+    <fragment
+        android:id="@+id/signUp"
+        android:name="com.example.firebase.screens.signUp.SignUpFragment"
+        android:label="Sign Up"
+        tools:layout="@layout/fragment_sign_up">
+
+        <action
+            android:id="@+id/action_signUp_to_rvUserList"
+            app:destination="@id/rvUserList" />
+        <action
+            android:id="@+id/action_signUp_to_fLogin"
+            app:destination="@id/fLogin" />
+    </fragment>
     <fragment
         android:id="@+id/rvUserList"
         android:name="com.example.firebase.screens.userList.UsersListFragment"
