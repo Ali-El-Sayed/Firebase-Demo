@@ -5,30 +5,37 @@ import android.os.Bundle
 import android.os.SystemClock.sleep
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.firebase.R
 import com.example.firebase.databinding.FragmentUpdateUserBinding
 import com.example.firebase.models.User
+import com.google.firebase.database.FirebaseDatabase
 
 class UpdateUserFragment : Fragment(R.layout.fragment_update_user) {
     private var binding: FragmentUpdateUserBinding? = null
-    private lateinit var viewmodel: UpdateUserViewmodel
+    private  val viewmodel: UpdateUserViewmodel by viewModels {
+        UpdateUserViewModelFactory(firebaseDatabase, requireActivity().application)
+    }
+    private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // view Binding
+        // Setup ViewBinding
         binding = FragmentUpdateUserBinding.bind(requireView())
-        // setup viewModel
-        viewmodel = ViewModelProvider(this)[UpdateUserViewmodel::class.java]
         binding?.lifecycleOwner = viewLifecycleOwner
 
+        // Update Viewmodel state
         viewmodel.updatedUser.value = User(
             arguments?.getString("userId") ?: "",
             arguments?.getString("userName") ?: "",
             arguments?.getString("userAge")?.toInt() ?: 0,
             arguments?.getString("userEmail") ?: ""
         )
+
+        // Loading Spinner Observer
         viewmodel.isloading.observe(viewLifecycleOwner) {
             if (it) binding?.pbLoading?.visibility = View.VISIBLE
             else binding?.pbLoading?.visibility = View.INVISIBLE
@@ -40,6 +47,7 @@ class UpdateUserFragment : Fragment(R.layout.fragment_update_user) {
             it.findNavController().navigateUp()
         }
     }
+
     private fun bindUi() {
         binding?.etUpdateName?.setText(viewmodel.updatedUser.value?.name ?: "")
         binding?.etUpdateEmail?.setText(viewmodel.updatedUser.value?.email ?: "")

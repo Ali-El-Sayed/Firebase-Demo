@@ -3,19 +3,28 @@ package com.example.firebase.screens.addUser
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
 import com.example.firebase.R
 import com.example.firebase.databinding.FragmentAddUserBinding
+import com.google.firebase.database.FirebaseDatabase
 
 class AddUserFragment : Fragment(R.layout.fragment_add_user) {
-    private lateinit var viewmodel: AddUserViewModel
-
+    private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
     private var binding: FragmentAddUserBinding? = null
+
+    // Setup ViewModel
+    private val viewmodel: AddUserViewModel by viewModels {
+        AddUserViewModelFactory(firebaseDatabase, requireActivity().application)
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // Setup ViewBinding
         binding = FragmentAddUserBinding.bind(view)
-        viewmodel = ViewModelProvider(this)[AddUserViewModel::class.java]
+        binding?.lifecycleOwner = viewLifecycleOwner
 
         viewmodel.isloading.observe(viewLifecycleOwner) {
             if (it) binding?.pbLoading?.visibility = View.VISIBLE

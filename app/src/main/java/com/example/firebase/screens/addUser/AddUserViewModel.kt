@@ -6,12 +6,16 @@ import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
 import com.example.firebase.models.User
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 
-class AddUserViewModel(application: Application) : AndroidViewModel(application) {
-    private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+class AddUserViewModel(firebaseDatabase: FirebaseDatabase, application: Application) :
+    AndroidViewModel(application) {
+
     private val reference: DatabaseReference = firebaseDatabase.reference.child("MyUsers")
     private val _isloading: MutableLiveData<Boolean> = MutableLiveData()
     val isloading: LiveData<Boolean>
@@ -22,15 +26,23 @@ class AddUserViewModel(application: Application) : AndroidViewModel(application)
         val user = User(id, name, age, email)
 
         _isloading.value = true
-        reference.child(id).setValue(user).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                Toast.makeText(
-                    getApplication(), "User Added Successfully", Toast.LENGTH_SHORT
+        viewModelScope.launch {
+            reference.child(id).setValue(user).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        getApplication(), "User Added Successfully", Toast.LENGTH_SHORT
+                    ).show()
+                } else Toast.makeText(
+                    getApplication(), task.exception.toString(), Toast.LENGTH_SHORT
                 ).show()
-            } else Toast.makeText(
-                getApplication(), task.exception.toString(), Toast.LENGTH_SHORT
-            ).show()
-            _isloading.value = false
+                _isloading.value = false
+            }
         }
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // Clear any coroutines running in this ViewModel's scope
+        viewModelScope.cancel()
     }
 }

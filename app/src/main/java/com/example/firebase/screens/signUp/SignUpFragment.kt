@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.constraintlayout.motion.widget.TransitionBuilder.validate
+import androidx.fragment.app.viewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.firebase.R
@@ -19,52 +20,64 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class SignUpFragment : Fragment(R.layout.fragment_sign_up) {
-    private lateinit var binding: FragmentSignUpBinding
+    private var binding: FragmentSignUpBinding? = null
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
-    private val emailValidator = EmailValidator()
-    private val passwordValidator = PasswordValidator()
+
+    // Setup ViewModel
+    private val viewModel: SignUpViewModel by viewModels {
+        SignUpViewModelFactory(auth, requireActivity().application)
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
-    ): View {
+    ): View? {
         binding = FragmentSignUpBinding.inflate(inflater)
 
-        binding.btSignUp.setOnClickListener {
-            val email = binding.etEmail.text.toString().trim()
-            val password = binding.etPassword.text.toString().trim()
-            if (perfromValidation()) signUpWithFirebase(email, password)
+        binding?.btSignUp?.setOnClickListener {
+            signUp()
         }
-
-
-        return binding.root
+        return binding?.root
     }
 
-    private fun perfromValidation(): Boolean {
-        val email = binding.etEmail.text.toString().trim()
-        val password = binding.etPassword.text.toString().trim()
+    private fun signUp() {
+        val email = binding?.etEmail?.text.toString().trim()
+        val password = binding?.etPassword?.text.toString().trim()
 
-        val emailIsValid = emailValidator.validate(email)
-        val passwordIsValid = passwordValidator.validate(password)
+        val (emailValidation, passwordValidation) = validate(email, password)
 
-        binding.etEmailLayout.error = emailIsValid
-        binding.etPasswordLayout.error = passwordIsValid
-        return (emailIsValid.isNullOrEmpty() && passwordIsValid.isNullOrBlank())
+//        if (emailValidation == null && passwordValidation == null)
+        signUpWithFirebase(email, password)
+//        else updateUi(emailValidation, passwordValidation)
     }
+
+    private fun updateUi(emailValidation: String?, passwordValidation: String?) {
+        binding?.etEmailLayout?.error = emailValidation
+        binding?.etPasswordLayout?.error = passwordValidation
+    }
+
+    private fun validate(
+        email: String, password: String
+    ): Pair<String?, String?> {
+        val emailValidation = viewModel.validateEmail(email)
+        val passwordValidation = viewModel.validatePassword(password)
+        return Pair(emailValidation, passwordValidation)
+    }
+
 
     private fun signUpWithFirebase(email: String, password: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener() { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(
-                        context, "Account Created Successfully", Toast.LENGTH_SHORT
-                    ).show()
-                    val options = NavOptions.Builder().setPopUpTo(R.id.fLogin, true).build()
-                    findNavController().navigate(R.id.action_signUp_to_fLogin, null, options)
-
-                } else Toast.makeText(context, task.exception?.toString(), Toast.LENGTH_SHORT)
-                    .show()
-            }
+        viewModel.signUpWithFirebase(email, password)
+        viewModel.status.observe(viewLifecycleOwner) {
+            if (it) navigateToSignInScreen()
         }
     }
 
+    private fun navigateToSignInScreen() {
+        val options = NavOptions.Builder().setPopUpTo(R.id.fLogin, true).build()
+        findNavController().navigate(R.id.action_signUp_to_fLogin, null, options)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        binding = null
+    }
 }
