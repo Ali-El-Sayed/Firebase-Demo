@@ -1,11 +1,10 @@
-package com.example.firebase.screens.logIn
+package com.example.firebase.screens.forgetPassword
 
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.firebase.util.validation.EmailValidator
 import com.example.firebase.util.validation.PasswordValidator
@@ -16,7 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 
-class LogInViewModel(
+class ForgetPasswordViewModel(
     private val auth: FirebaseAuth, private val application: Application
 ) : AndroidViewModel(application) {
     private val emailValidator = EmailValidator()
@@ -30,19 +29,6 @@ class LogInViewModel(
     val currentUser: MutableLiveData<FirebaseUser?>
         get() = _currentUser
 
-    fun logInWithFirebase(email: String, password: String) {
-        CoroutineScope(Dispatchers.IO).launch {
-            auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Toast.makeText(
-                        application, "Logged In Successfully", Toast.LENGTH_SHORT
-                    ).show()
-                    _status.value = true
-                } else Toast.makeText(application, task.exception?.toString(), Toast.LENGTH_SHORT)
-                    .show()
-            }
-        }
-    }
 
     fun validateEmail(email: String): String? {
         return emailValidator.validate(email)
@@ -56,5 +42,19 @@ class LogInViewModel(
         super.onCleared()
         // Clear any coroutines running in this ViewModel's scope
         viewModelScope.cancel()
+    }
+
+    fun resetPassword(email: String) {
+        viewModelScope.launch {
+            auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    Toast.makeText(
+                        application, "We sent a password reset to your mail", Toast.LENGTH_SHORT
+                    ).show()
+                    _status.value = true
+                } else Toast.makeText(application, task.exception.toString(), Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
     }
 }

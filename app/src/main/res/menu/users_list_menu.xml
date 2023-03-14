@@ -6,4 +6,8 @@
         android:icon="@drawable/delete_icon"
         android:title="@string/delete_all"
         app:showAsAction="always" />
+    <item
+        android:id="@+id/menu_log_out"
+        android:title="@string/sign_out"
+        app:showAsAction="never" />
 </menu>

@@ -16,4 +16,7 @@
     <string name="password">Password</string>
     <string name="sign_up">Sign Up</string>
     <string name="sign_in">Sign In</string>
+    <string name="sign_out">Sign out</string>
+    <string name="forget_password">Forget Password ?</string>
+    <string name="reset_my_password">Reset My Password</string>
 </resources>

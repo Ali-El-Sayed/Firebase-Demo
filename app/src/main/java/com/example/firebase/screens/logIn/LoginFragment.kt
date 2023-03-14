@@ -36,8 +36,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         binding?.btSignIn?.setOnClickListener {
             logIn()
         }
+        binding?.tvForgetPassword?.setOnClickListener {
+            navigateToForgetPassword()
+        }
 
         return binding?.root
+    }
+
+    private fun navigateToForgetPassword() {
+        findNavController().navigate(R.id.action_fLogin_to_forgetPasswordFragment)
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.currentUser.value?.let {
+            navigateToListFragment()
+        }
     }
 
     private fun logIn() {
@@ -68,10 +82,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun navigateToListFragment() {
         val navOptions = NavOptions.Builder().setPopUpTo(R.id.fLogin, true).build()
         findNavController().navigate(R.id.action_fLogin_to_rvUserList, null, navOptions)
-        activity?.let { act ->
-            val actionBar = (act as AppCompatActivity).supportActionBar
-            actionBar?.setDisplayHomeAsUpEnabled(false)
-        }
     }
 
     private fun logInWithFirebase(email: String, password: String) {

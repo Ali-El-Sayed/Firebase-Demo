@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_fLogin_to_signUp"
             app:destination="@id/signUp" />
+        <action
+            android:id="@+id/action_fLogin_to_forgetPasswordFragment"
+            app:destination="@id/forgetPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/signUp"
@@ -41,6 +44,9 @@
         <action
             android:id="@+id/action_rvUserList_to_rvUpdateUser"
             app:destination="@id/rvUpdateUser" />
+        <action
+            android:id="@+id/action_rvUserList_to_fLogin"
+            app:destination="@id/fLogin" />
     </fragment>
 
     <fragment
@@ -55,5 +61,10 @@
         android:name="com.example.firebase.screens.addUser.AddUserFragment"
         android:label="Add User"
         tools:layout="@layout/fragment_add_user" />
+    <fragment
+        android:id="@+id/forgetPasswordFragment"
+        android:name="com.example.firebase.screens.forgetPassword.ForgetPasswordFragment"
+        android:label="ForgetPasswordFragment"
+        tools:layout="@layout/fragment_forget_password" />
 
 </navigation>
