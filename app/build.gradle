@@ -42,8 +42,10 @@ dependencies {
 
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
-    implementation 'com.google.android.material:material:1.8.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
+
+    // Material 3
+    implementation 'com.google.android.material:material:1.8.0'
 
     // Navigation Components
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
@@ -51,9 +53,12 @@ dependencies {
 
     // Firebase
     implementation 'com.google.firebase:firebase-database-ktx:20.1.0'
-    
+
     // Firebase Auth
     implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
+
+    // Firebase Cloud Messaging
+    implementation 'com.google.firebase:firebase-messaging-ktx:23.1.2'
 
     // Coroutines
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4'
