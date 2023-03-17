@@ -1,7 +1,9 @@
 package com.example.firebase.screens.userList
 
 import android.os.Bundle
+import android.transition.Slide
 import android.view.*
+import android.view.animation.AlphaAnimation
 import androidx.annotation.MenuRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +25,11 @@ import com.example.firebase.R
 import com.example.firebase.databinding.FragmentUsersListBinding
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
+import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
+import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
+import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
+import jp.wasabeef.recyclerview.animators.*
+import java.net.HttpURLConnection
 
 private const val TAG = "UsersListFragment"
 
@@ -36,6 +43,7 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
         super.onViewCreated(view, savedInstanceState)
         val menuHost: MenuHost = requireActivity()
         binding = FragmentUsersListBinding.bind(view)
+
 
         val actionBar = (requireActivity() as AppCompatActivity).supportActionBar
         actionBar?.setDisplayHomeAsUpEnabled(false)
@@ -52,6 +60,9 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
             adapter.submitList(it)
             binding?.rvUserList?.adapter = adapter
         }
+        binding?.rvUserList?.itemAnimator = SlideInUpAnimator()
+
+
 
         // Hide Fab with Scrolling
         binding?.rvUserList?.addOnScrollListener(object : RecyclerView.OnScrollListener() {
@@ -74,11 +85,12 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 viewModel.deleteUser(viewHolder.adapterPosition)
+                adapter.notifyItemRemoved(viewHolder.adapterPosition)
             }
 
         }).attachToRecyclerView(binding?.rvUserList)
 
-        // recyclerView
+        // recyclerView LayoutManager Setup
         binding?.rvUserList?.layoutManager = LinearLayoutManager(
             requireContext(), RecyclerView.VERTICAL, false
         )

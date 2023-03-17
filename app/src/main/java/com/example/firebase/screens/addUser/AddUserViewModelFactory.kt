@@ -1,6 +1,7 @@
 package com.example.firebase.screens.addUser
 
 import android.app.Application
+import androidx.activity.result.ActivityResultRegistry
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.database.FirebaseDatabase
@@ -8,11 +9,12 @@ import java.lang.IllegalArgumentException
 
 @Suppress("UNCHECKED_CAST")
 class AddUserViewModelFactory(
-    private val db: FirebaseDatabase, private val application: Application
+    private val db: FirebaseDatabase, private val application: Application,
+    private val activityResultRegistry: ActivityResultRegistry
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(AddUserViewModel::class.java))
-            return AddUserViewModel(db, application) as T
+            return AddUserViewModel(db, application, activityResultRegistry) as T
         throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

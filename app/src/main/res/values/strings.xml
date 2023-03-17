@@ -19,4 +19,7 @@
     <string name="sign_out">Sign out</string>
     <string name="forget_password">Forget Password ?</string>
     <string name="reset_my_password">Reset My Password</string>
+    <string name="age">Age</string>
+    <string name="name">Name</string>
+    <string name="add_user">Add User</string>
 </resources>
