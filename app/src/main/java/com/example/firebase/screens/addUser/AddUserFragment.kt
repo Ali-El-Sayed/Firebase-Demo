@@ -3,8 +3,6 @@ package com.example.firebase.screens.addUser
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.Toast
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.firebase.R
@@ -35,7 +33,7 @@ class AddUserFragment : Fragment(R.layout.fragment_add_user) {
         binding?.lifecycleOwner = viewLifecycleOwner
 
 
-        viewmodel.isloading.observe(viewLifecycleOwner) {
+        viewmodel.isLoading.observe(viewLifecycleOwner) {
             if (it) binding?.pbLoading?.visibility = View.VISIBLE
             else binding?.pbLoading?.visibility = View.INVISIBLE
         }

@@ -6,10 +6,9 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import android.os.Build
-import android.os.SystemClock.sleep
 import android.provider.MediaStore
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.ActivityResultRegistry
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.AndroidViewModel
@@ -21,9 +20,11 @@ import com.example.firebase.permissions.PhotosPermission
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 import java.util.UUID
+
+private const val TAG = "AddUserViewModel"
 
 class AddUserViewModel(
     firebaseDatabase: FirebaseDatabase,
@@ -41,38 +42,36 @@ class AddUserViewModel(
             getApplication(), "Permission Denied", Toast.LENGTH_SHORT
         ).show()
     }
-    private val photoReslutLauncher =
+    private val photoResultLauncher =
         activityResultRegistry.register("2", ActivityResultContracts.StartActivityForResult()) {
             if (it.resultCode == Activity.RESULT_OK) _imgUri.value = it.data?.data
         }
     private val photosPermission by lazy { PhotosPermission() }
     private val reference: DatabaseReference = firebaseDatabase.reference.child("MyUsers")
     private val storageReference = firebaseStorage.reference
-    private val _isloading: MutableLiveData<Boolean> = MutableLiveData()
-    val isloading: LiveData<Boolean>
-        get() = _isloading
+    private val _isLoading: MutableLiveData<Boolean> = MutableLiveData()
+    val isLoading: LiveData<Boolean>
+        get() = _isLoading
 
     private var _imgUri: MutableLiveData<Uri?> = MutableLiveData()
     val imgUri: LiveData<Uri?>
         get() = _imgUri
 
     private fun uploadImage(): String {
-        _isloading.value = true
+        _isLoading.value = true
         val uuid = UUID.randomUUID().toString()
         val imageRef = storageReference.child("Images").child(uuid)
         var url = ""
 
-        viewModelScope.launch {
-            imgUri.value?.let {
-                imageRef.putFile(it).addOnCompleteListener { task ->
-                    if (task.isSuccessful) url = task.result.toString()
-                    else Toast.makeText(
-                        getApplication(), task.exception.toString(), Toast.LENGTH_SHORT
-                    ).show()
-                }
+        CoroutineScope(Dispatchers.IO).launch {
+            imgUri.value?.let { uri ->
+                imageRef.putFile(uri).await()
+                url = imageRef.downloadUrl.await().toString()
+                Log.d(TAG, "uploadImage: $url")
             }
         }
-        _isloading.value = false
+        Log.d(TAG, "uploadImage2: $url")
+        _isLoading.value = false
         return url
     }
 
@@ -81,7 +80,7 @@ class AddUserViewModel(
         val url = uploadImage()
         val user = User(id, name, age, email, url)
 
-        _isloading.value = true
+        _isLoading.value = true
         viewModelScope.launch {
             reference.child(id).setValue(user).addOnCompleteListener { task ->
                 if (task.isSuccessful) {
@@ -91,7 +90,7 @@ class AddUserViewModel(
                 } else Toast.makeText(
                     getApplication(), task.exception.toString(), Toast.LENGTH_SHORT
                 ).show()
-                _isloading.value = false
+                _isLoading.value = false
             }
         }
     }
@@ -118,7 +117,7 @@ class AddUserViewModel(
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) MediaStore.ACTION_PICK_IMAGES
             else Intent.ACTION_GET_CONTENT
         }
-        photoReslutLauncher.launch(intent)
+        photoResultLauncher.launch(intent)
     }
 
     override fun onCleared() {

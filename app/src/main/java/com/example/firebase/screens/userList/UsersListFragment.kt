@@ -1,14 +1,9 @@
 package com.example.firebase.screens.userList
 
 import android.os.Bundle
-import android.transition.Slide
 import android.view.*
-import android.view.animation.AlphaAnimation
-import androidx.annotation.MenuRes
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.MenuHost
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
@@ -17,19 +12,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.firebase.R
 import com.example.firebase.databinding.FragmentUsersListBinding
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.auth.FirebaseAuth
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
-import jp.wasabeef.recyclerview.adapters.SlideInBottomAnimationAdapter
 import jp.wasabeef.recyclerview.animators.*
-import java.net.HttpURLConnection
 
 private const val TAG = "UsersListFragment"
 
@@ -61,7 +50,6 @@ class UsersListFragment : Fragment(R.layout.fragment_users_list) {
             binding?.rvUserList?.adapter = adapter
         }
         binding?.rvUserList?.itemAnimator = SlideInUpAnimator()
-
 
 
         // Hide Fab with Scrolling
