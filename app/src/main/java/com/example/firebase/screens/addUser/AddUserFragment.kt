@@ -1,41 +1,27 @@
 package com.example.firebase.screens.addUser
 
-import android.Manifest
-import android.app.Activity.RESULT_OK
-import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.provider.MediaStore
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.widget.Toast
-import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.activity.result.registerForActivityResult
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.example.firebase.R
 import com.example.firebase.databinding.FragmentAddUserBinding
-import com.example.firebase.permissions.PhotosPermission
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 
 class AddUserFragment : Fragment(R.layout.fragment_add_user) {
     private val firebaseDatabase: FirebaseDatabase = FirebaseDatabase.getInstance()
+    private val firebaseStorage: FirebaseStorage = FirebaseStorage.getInstance()
     private var binding: FragmentAddUserBinding? = null
-    private val requestPermissionLauncher = registerForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted ->
-        if (isGranted) viewmodel.selectImage()
-        else Toast.makeText(
-            requireActivity(), "Permission Denied", Toast.LENGTH_SHORT
-        ).show()
-    }
 
     // Setup ViewModel
     val viewmodel: AddUserViewModel by viewModels {
         AddUserViewModelFactory(
             firebaseDatabase,
+            firebaseStorage,
             requireActivity().application,
             requireActivity().activityResultRegistry
         )
@@ -63,7 +49,7 @@ class AddUserFragment : Fragment(R.layout.fragment_add_user) {
         // select picture from gallery and set it to the image view
         binding?.ivUserImage?.setOnClickListener {
             pickImage()
-            }
+        }
     }
 
     private fun pickImage() {
@@ -75,10 +61,14 @@ class AddUserFragment : Fragment(R.layout.fragment_add_user) {
 
 
     private fun performAdding() {
+        binding?.pbLoading?.visibility = View.VISIBLE
+        binding?.btAddUser?.isEnabled = false
         val name: String = binding?.etName?.text.toString().trim()
         val email: String = binding?.etEmail?.text.toString().trim()
         val age: Int = binding?.etAge?.text.toString().trim().toIntOrNull() ?: 0
         viewmodel.addUser(name, age, email)
+        binding?.pbLoading?.visibility = View.INVISIBLE
+        binding?.btAddUser?.isEnabled = true
     }
 
 

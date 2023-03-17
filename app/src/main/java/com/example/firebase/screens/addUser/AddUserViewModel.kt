@@ -20,11 +20,14 @@ import com.example.firebase.models.User
 import com.example.firebase.permissions.PhotosPermission
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import java.util.UUID
 
 class AddUserViewModel(
     firebaseDatabase: FirebaseDatabase,
+    firebaseStorage: FirebaseStorage,
     application: Application,
     activityResultRegistry: ActivityResultRegistry,
 
@@ -44,6 +47,7 @@ class AddUserViewModel(
         }
     private val photosPermission by lazy { PhotosPermission() }
     private val reference: DatabaseReference = firebaseDatabase.reference.child("MyUsers")
+    private val storageReference = firebaseStorage.reference
     private val _isloading: MutableLiveData<Boolean> = MutableLiveData()
     val isloading: LiveData<Boolean>
         get() = _isloading
@@ -52,10 +56,30 @@ class AddUserViewModel(
     val imgUri: LiveData<Uri?>
         get() = _imgUri
 
+    private fun uploadImage(): String {
+        _isloading.value = true
+        val uuid = UUID.randomUUID().toString()
+        val imageRef = storageReference.child("Images").child(uuid)
+        var url = ""
+
+        viewModelScope.launch {
+            imgUri.value?.let {
+                imageRef.putFile(it).addOnCompleteListener { task ->
+                    if (task.isSuccessful) url = task.result.toString()
+                    else Toast.makeText(
+                        getApplication(), task.exception.toString(), Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+        }
+        _isloading.value = false
+        return url
+    }
 
     fun addUser(name: String, age: Int, email: String) {
         val id = reference.push().key.toString()
-        val user = User(id, name, age, email)
+        val url = uploadImage()
+        val user = User(id, name, age, email, url)
 
         _isloading.value = true
         viewModelScope.launch {
@@ -80,13 +104,14 @@ class AddUserViewModel(
             selectImage()
         } else {
             val readImagePermission =
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) Manifest.permission.READ_MEDIA_IMAGES else Manifest.permission.READ_EXTERNAL_STORAGE
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) Manifest.permission.READ_MEDIA_IMAGES
+                else Manifest.permission.READ_EXTERNAL_STORAGE
             requestPermissionLauncher.launch(readImagePermission)
         }
 
     }
 
-    fun selectImage() {
+    private fun selectImage() {
         val intent = Intent(Intent.ACTION_PICK)
         intent.type = "image/*"
         intent.action = let {
